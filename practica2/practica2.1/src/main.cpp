@@ -6,6 +6,8 @@
  * Devuelve un vector de salida donde cada bit tiene una probabilidad f de haber cambiado su valor.
  */
 
+#include <Arduino.h>
+
 /**
  * Función que simula un canal ruidoso.
  * @param in Vector binario de entrada empaquetado en unsigned char
