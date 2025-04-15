@@ -5,7 +5,7 @@
  * de bits que se repiten en cada bloque. Recibe un mensaje binario empaquetado en bytes,
  * y genera una versión codificada donde cada bit se repite n veces.
  */
-
+#include <Arduino.h>
 /*
  * Función que implementa un codificador de repetición.
  * @param in Vector binario de entrada empaquetado en unsigned char
@@ -93,5 +93,4 @@ void setup() {
 }
 
 void loop() {
-  // No se requiere código en el loop para esta práctica
 }

@@ -5,7 +5,7 @@
  * y genera palabras código de 7 bits añadiendo 3 bits de paridad.
  * Cada byte de entrada contiene dos bloques de 4 bits que deben codificarse por separado.
  */
-
+#include <Arduino.h>
 /*
  * Función que implementa un codificador de bloque Hamming (7,4).
  * @param in Vector binario de entrada empaquetado en unsigned char
@@ -41,7 +41,7 @@ void hammingCoder(unsigned char *in, unsigned char *out, int l) {
       unsigned char p3 = d2 ^ d3 ^ d4;      // p3 = d2 + d3 + d4 (XOR)
       
       // Formar la palabra código de 7 bits: p1, p2, d1, p3, d2, d3, d4
-      unsigned char codeword[7] = {p1, p2, d1, p3, d2, d3, d4};
+      unsigned char resultado[7] = {p1, p2, d1, p3, d2, d3, d4};
       
       // Colocar los 7 bits de la palabra código en el vector de salida
       for (int j = 0; j < 7; j++) {
@@ -56,7 +56,7 @@ void hammingCoder(unsigned char *in, unsigned char *out, int l) {
         }
         
         // Colocar el bit en la posición correspondiente del byte de salida
-        out[outByteIndex] |= (codeword[j] << outBitPosition);
+        out[outByteIndex] |= (resultado[j] << outBitPosition);
         
         // Incrementar el índice del bit de salida
         outBitIndex++;
@@ -83,7 +83,6 @@ void setup() {
   while (!Serial) {
     ; // Esperar a que el puerto serial se conecte
   }
-  
   // Ejemplo de uso del codificador Hamming (7,4)
   const int length = 2; // Longitud del vector de entrada en bytes
   unsigned char input[length] = {0b10101010, 0b11110000};
@@ -103,14 +102,21 @@ void setup() {
   Serial.println("Vector de salida (después del codificador Hamming):");
   printBinaryVector(output, outputLength);
   
-  // Mostrar información sobre la codificación
-  Serial.println("Codificación Hamming (7,4):");
+  // Mostrar información detallada sobre la codificación
+  Serial.println("\nPruebas de codificación Hamming (7,4):");
+  Serial.print("Bytes de entrada: ");
+  Serial.println(length);
   Serial.print("Bits de entrada: ");
   Serial.println(length * 8);
+  Serial.print("Bytes de salida: ");
+  Serial.println(outputLength);
   Serial.print("Bits de salida: ");
   Serial.println(outputLength * 8);
   Serial.print("Tasa de código: ");
   Serial.println("4/7");
+  Serial.print("Bits de redundancia añadidos: ");
+  Serial.println((outputLength * 8) - (length * 8));
+  Serial.println("TENER EN CUENTA QUE SE REDONDEAN LOS BYTES");
 }
 
 void loop() {

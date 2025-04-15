@@ -5,6 +5,7 @@
  * de bits que se repiten en cada bloque. Recibe un mensaje codificado donde cada bit original
  * se ha repetido n veces, y recupera el mensaje original mediante un sistema de votación por mayoría.
  */
+#include <Arduino.h>
 
 /**
  * Función que implementa un decodificador de repetición.
@@ -84,7 +85,7 @@ void setup() {
   // Ejemplo de uso del decodificador de repetición
   const int n = 3; // Grado del codificador/decodificador (cada bit se repite 3 veces)
   
-  // Mensaje original
+  // Mensaje original para demostración
   const int originalLength = 2; // Longitud del mensaje original en bytes
   unsigned char original[originalLength] = {0b10101010, 0b11110000};
   
@@ -109,24 +110,13 @@ void setup() {
     }
   }
   
-  // Introducir algunos errores en el mensaje codificado (opcional)
-  // Por ejemplo, invertir algunos bits aleatorios
-  randomSeed(analogRead(0));
-  int numErrors = 3; // Número de errores a introducir
-  for (int i = 0; i < numErrors; i++) {
-    int errorBitIndex = random(0, codedLength * 8);
-    int errorByteIndex = errorBitIndex / 8;
-    int errorBitPosition = 7 - (errorBitIndex % 8);
-    coded[errorByteIndex] ^= (1 << errorBitPosition); // Invertir el bit
-  }
-  
   // Mensaje decodificado
   unsigned char decoded[originalLength];
   
   Serial.println("Mensaje original:");
   printBinaryVector(original, originalLength);
   
-  Serial.println("Mensaje codificado (con posibles errores):");
+  Serial.println("Mensaje codificado:");
   printBinaryVector(coded, codedLength);
   
   // Aplicar el decodificador de repetición
@@ -135,21 +125,6 @@ void setup() {
   Serial.println("Mensaje decodificado:");
   printBinaryVector(decoded, originalLength);
   
-  // Verificar si la decodificación fue exitosa
-  boolean success = true;
-  for (int i = 0; i < originalLength; i++) {
-    if (original[i] != decoded[i]) {
-      success = false;
-      break;
-    }
-  }
-  
-  if (success) {
-    Serial.println("La decodificación fue exitosa. El mensaje se recuperó correctamente.");
-  } else {
-    Serial.println("La decodificación falló. El mensaje recuperado no coincide con el original.");
-  }
-  
   // Mostrar información sobre la decodificación
   Serial.print("Grado de repetición: ");
   Serial.println(n);
@@ -157,8 +132,6 @@ void setup() {
   Serial.println(codedLength * 8);
   Serial.print("Bits del mensaje decodificado: ");
   Serial.println(originalLength * 8);
-  Serial.print("Número de errores introducidos: ");
-  Serial.println(numErrors);
 }
 
 void loop() {
