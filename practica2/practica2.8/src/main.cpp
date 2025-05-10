@@ -8,29 +8,24 @@
  */
 #include <Arduino.h>
 
+// Función auxiliar global para imprimir un vector de bytes en formato binario
+void printBinaryVector(unsigned char *vec, int length) {
+  for (int i = 0; i < length; i++) {
+    for (int j = 7; j >= 0; j--) {
+      // Extraer y mostrar cada bit, empezando por el más significativo
+      Serial.print((vec[i] >> j) & 1);
+    }
+    Serial.print(" ");
+  }
+  Serial.println();
+}
+
 /**
  * Clase que implementa un codificador y decodificador Hamming (7,4).
  * Permite codificar mensajes usando el código Hamming (7,4) y decodificarlos
  * con capacidad de corrección de errores de un solo bit.
  */
 class HammingCode {
-private:
-  /**
-   * Método auxiliar para imprimir un vector de bytes en formato binario
-   * @param vec Vector a imprimir
-   * @param length Longitud del vector en bytes
-   */
-  void printBinaryVector(unsigned char *vec, int length) {
-    for (int i = 0; i < length; i++) {
-      for (int j = 7; j >= 0; j--) {
-        // Extraer y mostrar cada bit, empezando por el más significativo
-        Serial.print((vec[i] >> j) & 1);
-      }
-      Serial.print(" ");
-    }
-    Serial.println();
-  }
-  
 public:
   /**
    * Constructor de la clase
@@ -211,10 +206,10 @@ public:
    */
   void printInfo(unsigned char *original, unsigned char *coded, int originalLength, int codedLength) {
     Serial.println("Mensaje original:");
-    printBinaryVector(original, originalLength);
+    ::printBinaryVector(original, originalLength);
     
     Serial.println("Mensaje codificado con Hamming (7,4):");
-    printBinaryVector(coded, codedLength);
+    ::printBinaryVector(coded, codedLength);
     
     Serial.print("Bits del mensaje original: ");
     Serial.println(originalLength * 8);
